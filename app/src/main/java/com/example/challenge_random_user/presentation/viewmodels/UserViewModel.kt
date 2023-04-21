@@ -39,44 +39,10 @@ class UserViewModel @Inject constructor(
                             _allUsers.add(onlyUser)
                         }
                     }
+                    _state.value = users.body().let { it1 -> UserState(allUsers = _allUsers) }
                 }
                 else -> {}
             }
         }
     }
-
-
-//    private fun getsers() {
-//        userRepositoryImpl.getRandomUser { result ->
-//            when (result) {
-//                is Resource.Success -> {
-//                    result.data?.body()?.results?.let { list ->
-//                        list.map {
-//                            _allUsers.add(it)
-//                            Log.e("200", it.picture.thumbnail)
-//                        }
-//                    }
-//                    _state.value = result.data?.let { it1 -> UserState(allUsers = _allUsers) }!!
-//
-//
-////                    result.data.let {
-////                            if (it != null) {
-////                                it.body()?.results?.map {
-////                                    _allUsers.add(it)
-////
-////                                }
-////                            }
-//////                        _state.value =
-//////                            result.data?.let { it1 -> UserState(allUsers = _allUsers) }!!
-////                    }
-//                }
-//                is Resource.Error -> {
-//                    _state.value = UserState(error = result.message.toString())
-//                }
-//                is Resource.Loading -> {
-//                    _state.value = UserState(isLoading = true)
-//                }
-//            }
-//        }.launchIn(viewModelScope)
-//    }
 }

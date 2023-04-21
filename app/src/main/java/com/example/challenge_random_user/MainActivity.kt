@@ -1,9 +1,11 @@
 package com.example.challenge_random_user
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -40,5 +42,9 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: UserViewModel = hiltViewModel()) {
     val viewModel = name.state.value.allUsers
 
-    Text(text = "Hello $viewModel!")
+    Column(Modifier.fillMaxSize(1f)) {
+        viewModel.map {
+            Text(text = it.location.postcode)
+        }
+    }
 }
