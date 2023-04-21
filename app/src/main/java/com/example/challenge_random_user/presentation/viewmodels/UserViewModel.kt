@@ -11,6 +11,8 @@ import com.example.challenge_random_user.presentation.UserState
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,8 +21,8 @@ class UserViewModel @Inject constructor(
     private val userRepositoryImpl: UserRepositoryImpl
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(UserState())
-    val state: State<UserState> = _state
+    private val _state = MutableStateFlow(UserState())
+    val state: StateFlow<UserState> = _state
     private val _allUsers = arrayListOf<com.example.challenge_random_user.domain.models.Result>()
 
     init {
