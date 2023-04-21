@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.example.challenge_random_user.presentation.ui.SplashScreen
 import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
 import com.example.challenge_random_user.ui.theme.Challenge_random_userTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +39,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting(mainViewModel)
+//                    Greeting(mainViewModel)
+                    SplashScreen()
                 }
             }
         }
@@ -67,7 +69,7 @@ fun Greeting(vModel: UserViewModel = hiltViewModel()) {
                         .aspectRatio(16f / 9f),
                     painter = rememberImagePainter(data = item.picture.large),
                     contentDescription = null,
-                    contentScale = ContentScale.FillWidth
+                    contentScale = ContentScale.FillWidth,
                 )
             }
         }
