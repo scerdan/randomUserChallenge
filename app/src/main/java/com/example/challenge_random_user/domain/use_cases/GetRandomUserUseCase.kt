@@ -6,6 +6,7 @@ import com.example.challenge_random_user.utlis.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
@@ -13,7 +14,7 @@ class GetRandomUserUseCase @Inject constructor(
     private val repository: UserRespository
 ) {
 
-    fun execute(): Flow<Resource<User>> = flow {
+    fun execute(): Flow<Resource<Response<User>>> = flow {
         try {
             emit(Resource.Loading())
             val users = repository.getRandomUser()
