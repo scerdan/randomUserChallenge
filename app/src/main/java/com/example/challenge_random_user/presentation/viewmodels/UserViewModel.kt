@@ -5,20 +5,18 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.challenge_random_user.data.repository.UserRepositoryImpl
 import com.example.challenge_random_user.domain.models.User
-import com.example.challenge_random_user.domain.use_cases.GetRandomUserUseCase
 import com.example.challenge_random_user.presentation.UserState
-import com.example.challenge_random_user.utlis.Resource
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val getRandomUserUseCase: GetRandomUserUseCase
+    private val userRepositoryImpl: UserRepositoryImpl
 ) : ViewModel() {
 
     private val _state = mutableStateOf(UserState())
@@ -27,41 +25,58 @@ class UserViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            getRandomUser()
+            getUsers()
         }
     }
 
-    private fun getRandomUser() {
-        getRandomUserUseCase.execute().onEach { result ->
-            when (result) {
-                is Resource.Success -> {
-                    result.data?.body()?.results?.let { list ->
-                        list.map {
-                            _allUsers.add(it)
-                            Log.e("200", it.picture.thumbnail)
+    private suspend fun getUsers() {
+        viewModelScope.launch {
+            val users = userRepositoryImpl.getRandomUser()
+            when (users.code()) {
+                200 -> {
+                    if (users.isSuccessful) {
+                        users.body()?.results?.map { onlyUser ->
+                            _allUsers.add(onlyUser)
                         }
                     }
-                    _state.value = result.data?.let { it1 -> UserState(allUsers = _allUsers) }!!
-
-
-//                    result.data.let {
-//                            if (it != null) {
-//                                it.body()?.results?.map {
-//                                    _allUsers.add(it)
-//
-//                                }
-//                            }
-////                        _state.value =
-////                            result.data?.let { it1 -> UserState(allUsers = _allUsers) }!!
-//                    }
                 }
-                is Resource.Error -> {
-                    _state.value = UserState(error = result.message.toString())
-                }
-                is Resource.Loading -> {
-                    _state.value = UserState(isLoading = true)
-                }
+                else -> {}
             }
-        }.launchIn(viewModelScope)
+        }
     }
+
+
+//    private fun getsers() {
+//        userRepositoryImpl.getRandomUser { result ->
+//            when (result) {
+//                is Resource.Success -> {
+//                    result.data?.body()?.results?.let { list ->
+//                        list.map {
+//                            _allUsers.add(it)
+//                            Log.e("200", it.picture.thumbnail)
+//                        }
+//                    }
+//                    _state.value = result.data?.let { it1 -> UserState(allUsers = _allUsers) }!!
+//
+//
+////                    result.data.let {
+////                            if (it != null) {
+////                                it.body()?.results?.map {
+////                                    _allUsers.add(it)
+////
+////                                }
+////                            }
+//////                        _state.value =
+//////                            result.data?.let { it1 -> UserState(allUsers = _allUsers) }!!
+////                    }
+//                }
+//                is Resource.Error -> {
+//                    _state.value = UserState(error = result.message.toString())
+//                }
+//                is Resource.Loading -> {
+//                    _state.value = UserState(isLoading = true)
+//                }
+//            }
+//        }.launchIn(viewModelScope)
+//    }
 }

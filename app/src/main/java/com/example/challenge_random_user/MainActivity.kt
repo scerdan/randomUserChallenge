@@ -3,6 +3,7 @@ package com.example.challenge_random_user
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -10,11 +11,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
 import com.example.challenge_random_user.ui.theme.Challenge_random_userTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: UserViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -24,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    Greeting(mainViewModel)
                 }
             }
         }
@@ -32,14 +37,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+fun Greeting(name: UserViewModel = hiltViewModel()) {
+    val viewModel = name.state.value.allUsers
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    Challenge_random_userTheme {
-        Greeting("Android")
-    }
+    Text(text = "Hello $viewModel!")
 }

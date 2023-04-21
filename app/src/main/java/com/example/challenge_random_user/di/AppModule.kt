@@ -2,7 +2,7 @@ package com.example.challenge_random_user.di
 
 import com.example.challenge_random_user.data.remote.ApiService
 import com.example.challenge_random_user.data.repository.UserRepositoryImpl
-import com.example.challenge_random_user.domain.repository.UserRespository
+import com.example.challenge_random_user.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,6 +15,6 @@ object AppModule {
 
     @Provides
     @ViewModelScoped
-    fun provideRandomUserRepository(api: ApiService): UserRespository =
+    fun provideRandomUserRepository(api: ApiService): UserRepository =
         UserRepositoryImpl(api)
 }
