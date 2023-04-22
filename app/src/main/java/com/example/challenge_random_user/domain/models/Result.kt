@@ -10,6 +10,8 @@ data class Result(
     val dob: Dob,
     @SerializedName("email")
     val email: String,
+    @SerializedName("login")
+    val login: Login,
     @SerializedName("gender")
     val gender: String,
     @SerializedName("id")

@@ -26,7 +26,7 @@ fun NavigationGraph(viewModel: UserViewModel, sharedViewmodel: SharedViewmodel) 
         }
 
         composable(route = Screen.DETAIL_SCREEN.route) {
-            DetailScreen(navController, sharedViewmodel)
+            DetailScreen(sharedViewmodel)
         }
     }
 }

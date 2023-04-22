@@ -1,6 +1,7 @@
 package com.example.challenge_random_user.presentation.ui
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -8,15 +9,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.example.challenge_random_user.presentation.viewmodels.SharedViewmodel
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun DetailScreen(navBackStackEntry: NavHostController, viewModel: SharedViewmodel) {
+fun DetailScreen(viewModel: SharedViewmodel) {
 
 
     val dataNew = viewModel.clickedUser
     Log.e("USER =", dataNew.toString())
+
+    val textUserData = arrayListOf<String>().apply {
+        this.add(0, dataNew?.gender.toString())
+        this.add(1, dataNew?.name?.title + " "+ dataNew?.name?.first + " "+ dataNew?.name?.last)
+        this.add(2, dataNew?.login?.username.toString())
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -28,15 +37,15 @@ fun DetailScreen(navBackStackEntry: NavHostController, viewModel: SharedViewmode
                 .height(100.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-//                Image(
-//                    modifier = Modifier
-//                        .size(50.dp)
-//                        .align(Alignment.CenterVertically),
-//                    painter = painterResource(""),
-//                    contentDescription = null,
-//                )
+                Image(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .align(Alignment.CenterVertically),
+                    painter = rememberImagePainter(dataNew?.picture?.medium),
+                    contentDescription = null,
+                )
         }
-        for (i in 2..7) {
+        for (i in textUserData) {
             Row(
                 Modifier
                     .fillMaxWidth()
