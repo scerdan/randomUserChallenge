@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -22,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.example.challenge_random_user.presentation.ui.SplashScreen
+import com.example.challenge_random_user.presentation.ui.NavigationGraph
 import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
 import com.example.challenge_random_user.ui.theme.Challenge_random_userTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainViewModel: UserViewModel by viewModels()
+    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -40,37 +42,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 //                    Greeting(mainViewModel)
-                    SplashScreen()
+                    NavigationGraph(viewModel = mainViewModel)
                 }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalCoilApi::class)
-@Composable
-fun Greeting(vModel: UserViewModel = hiltViewModel()) {
-    val viewModel by vModel.state.collectAsState()
-    val userList = viewModel.allUsers
-
-
-    LazyColumn(Modifier.fillMaxSize(1f)){
-        items(userList) {item ->
-            Card(
-                Modifier
-                    .fillMaxWidth(1f)
-                    .fillMaxHeight(1 / 10f)
-                    .padding(top = 10.dp)
-                    .background(Color.Gray)
-            ) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(16f / 9f),
-                    painter = rememberImagePainter(data = item.picture.large),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                )
             }
         }
     }

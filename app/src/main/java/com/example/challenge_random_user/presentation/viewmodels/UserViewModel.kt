@@ -41,7 +41,7 @@ class UserViewModel @Inject constructor(
                             _allUsers.add(onlyUser)
                         }
                     }
-                    _state.value = users.body().let { it1 -> UserState(allUsers = _allUsers) }
+                    _state.value = UserState(allUsers = _allUsers)
                 }
                 else -> {}
             }

@@ -1,4 +1,4 @@
-package com.example.challenge_random_user.utlis
+package com.example.challenge_random_user.utils
 
 import com.example.challenge_random_user.BuildConfig
 

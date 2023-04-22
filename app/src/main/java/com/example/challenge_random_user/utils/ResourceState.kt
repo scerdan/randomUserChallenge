@@ -1,4 +1,4 @@
-package com.example.challenge_random_user.utlis
+package com.example.challenge_random_user.utils
 
 sealed class ResourceState<T>(
     val data: T? = null,

@@ -1,7 +1,7 @@
 package com.example.challenge_random_user.di
 
 import com.example.challenge_random_user.data.remote.ApiService
-import com.example.challenge_random_user.utlis.Constants
+import com.example.challenge_random_user.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
