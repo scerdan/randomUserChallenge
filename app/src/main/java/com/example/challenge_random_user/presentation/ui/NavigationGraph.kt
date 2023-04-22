@@ -2,9 +2,11 @@ package com.example.challenge_random_user.presentation.ui
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
 import com.example.challenge_random_user.utils.Screen
 import com.example.challenge_random_user.utils.UserMainScreen
@@ -24,8 +26,13 @@ fun NavigationGraph(viewModel: UserViewModel) {
             UserMainScreen(viewModel, navController)
         }
 
-        composable(route = Screen.DETAIL_SCREEN.route) {
-            DetailScreen()
+        composable(
+            route = Screen.DETAIL_SCREEN.route,
+            arguments = listOf(
+                navArgument("item") { type = NavType.StringArrayType },
+            )
+        ) {
+            DetailScreen(it, viewModel)
         }
 
     }

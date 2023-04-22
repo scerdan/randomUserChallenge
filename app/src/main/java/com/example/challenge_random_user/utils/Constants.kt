@@ -1,5 +1,6 @@
 package com.example.challenge_random_user.utils
 
+import android.os.Bundle
 import androidx.navigation.NavController
 import com.example.challenge_random_user.BuildConfig
 

@@ -1,5 +1,6 @@
 package com.example.challenge_random_user.utils
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,21 +23,31 @@ import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
+import android.os.Bundle
+import androidx.core.os.bundleOf
+import com.example.challenge_random_user.domain.models.Result
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun UserMainScreen(vModel: UserViewModel = hiltViewModel(), navController: NavHostController) {
 
     val viewModel by vModel.state.collectAsState()
     val userList = viewModel.allUsers
+    PaintMainScreen(userList, navController)
 
+}
+
+@OptIn(ExperimentalCoilApi::class)
+@Composable
+private fun PaintMainScreen(userList: ArrayList<Result>, navController: NavHostController) {
     Column(
         Modifier
             .fillMaxSize(1f)
             .background(Color.White)
     ) {
-        LazyColumn(Modifier.fillMaxSize(1f),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        LazyColumn(
+            Modifier.fillMaxSize(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             items(userList) { item ->
                 Card(
                     Modifier
@@ -44,7 +55,14 @@ fun UserMainScreen(vModel: UserViewModel = hiltViewModel(), navController: NavHo
                         .fillMaxHeight(1f)
                         .padding(20.dp)
                         .clickable {
-                            Constants.goTo(Screen.DETAIL_SCREEN.route, navController, false)
+                            navController.navigate("DetailScreen/${Uri.encode(item.toString())}") {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                bundleOf("item" to item)
+                            }
                         },
                     shape = RoundedCornerShape(12.dp),
                     elevation = 15.dp
@@ -53,8 +71,9 @@ fun UserMainScreen(vModel: UserViewModel = hiltViewModel(), navController: NavHo
                         Modifier
                             .fillMaxWidth(1f)
                     ) {
-                        Column(Modifier
-                            .fillMaxWidth(1 / 3f)
+                        Column(
+                            Modifier
+                                .fillMaxWidth(1 / 3f)
                         ) {
                             Image(
                                 modifier = Modifier
@@ -65,8 +84,10 @@ fun UserMainScreen(vModel: UserViewModel = hiltViewModel(), navController: NavHo
                                 contentScale = ContentScale.FillWidth,
                             )
                         }
-                        Column(Modifier.fillMaxWidth(1 / 1f),
-                        horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(
+                            Modifier.fillMaxWidth(1 / 1f),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Text(text = item.name.title + " " + item.name.first + " " + item.name.last)
                         }
                     }
@@ -76,5 +97,4 @@ fun UserMainScreen(vModel: UserViewModel = hiltViewModel(), navController: NavHo
             }
         }
     }
-
 }
