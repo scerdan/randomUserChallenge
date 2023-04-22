@@ -21,7 +21,11 @@ fun NavigationGraph(viewModel: UserViewModel) {
         }
 
         composable(route = Screen.HOME_SCREEN.route) {
-            UserMainScreen(viewModel)
+            UserMainScreen(viewModel, navController)
+        }
+
+        composable(route = Screen.DETAIL_SCREEN.route) {
+            DetailScreen()
         }
 
     }

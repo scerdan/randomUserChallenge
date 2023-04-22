@@ -18,13 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun UserMainScreen(vModel: UserViewModel = hiltViewModel()) {
+fun UserMainScreen(vModel: UserViewModel = hiltViewModel(), navController: NavHostController) {
 
     val viewModel by vModel.state.collectAsState()
     val userList = viewModel.allUsers
@@ -39,9 +40,12 @@ fun UserMainScreen(vModel: UserViewModel = hiltViewModel()) {
             items(userList) { item ->
                 Card(
                     Modifier
-                        .fillMaxWidth(1.55f)
+                        .fillMaxWidth(1.30f)
+                        .fillMaxHeight(1f)
                         .padding(20.dp)
-                        .clickable { },
+                        .clickable {
+                            Constants.goTo(Screen.DETAIL_SCREEN.route, navController, false)
+                        },
                     shape = RoundedCornerShape(12.dp),
                     elevation = 15.dp
                 ) {

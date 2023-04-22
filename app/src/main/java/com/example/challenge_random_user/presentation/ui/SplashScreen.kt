@@ -4,6 +4,7 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -22,6 +23,7 @@ import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.challenge_random_user.ui.theme.*
+import com.example.challenge_random_user.utils.Constants
 import com.example.challenge_random_user.utils.Screen
 import kotlinx.coroutines.delay
 
@@ -47,17 +49,15 @@ fun SplashScreen(navController: NavHostController) {
 
     LaunchedEffect(key1 = true) {
         animationPlayed = true
-        delay(1500L)
-        navController.popBackStack()
-        navController.navigate(
-            Screen.HOME_SCREEN.route
-        )
+        delay(2000L)
+        Constants.goTo(Screen.HOME_SCREEN.route,navController, true)
     }
 
 
     Column(
         Modifier
-            .fillMaxWidth(1f),
+            .fillMaxSize(1f)
+            .background(GradientColor1),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -102,7 +102,7 @@ fun SplashScreen(navController: NavHostController) {
         ) {
             Text(
                 "CHALLENGE", style = TextStyle(
-                    color = GradientColor1,
+                    color = GradientColor5,
                     fontSize = 50.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
