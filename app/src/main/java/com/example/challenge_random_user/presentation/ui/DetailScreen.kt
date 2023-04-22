@@ -22,9 +22,13 @@ fun DetailScreen(viewModel: SharedViewmodel) {
     Log.e("USER =", dataNew.toString())
 
     val textUserData = arrayListOf<String>().apply {
+        val address = dataNew?.location?.street?.name + dataNew?.location?.street?.number +" "+"${dataNew?.location?.city}"+" "+"${dataNew?.location?.state}"+" "+"${dataNew?.location?.postcode}"
         this.add(0, dataNew?.gender.toString())
         this.add(1, dataNew?.name?.title + " "+ dataNew?.name?.first + " "+ dataNew?.name?.last)
         this.add(2, dataNew?.login?.username.toString())
+        this.add(3, dataNew?.email.toString())
+        this.add(4, dataNew?.phone.toString())
+        this.add(5, address)
     }
 
     Column(
