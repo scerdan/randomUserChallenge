@@ -8,21 +8,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
-import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
-import java.util.*
+import androidx.navigation.NavHostController
+import com.example.challenge_random_user.presentation.viewmodels.SharedViewmodel
 
 @Composable
-fun DetailScreen(navBackStackEntry: NavBackStackEntry, viewModel: UserViewModel) {
+fun DetailScreen(navBackStackEntry: NavHostController, viewModel: SharedViewmodel) {
 
-    val dataRecieved = navBackStackEntry.arguments?.getStringArray("item")
 
-    if (dataRecieved != null) {
-        val arrayList = arrayListOf(dataRecieved)
-        arrayList.map {
-            Log.e("elemeto", it.toString())
-        }
-    }
+    val dataNew = viewModel.clickedUser
+    Log.e("USER =", dataNew.toString())
 
     Column(
         modifier = Modifier.fillMaxSize(),

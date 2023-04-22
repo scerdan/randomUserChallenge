@@ -1,6 +1,5 @@
-package com.example.challenge_random_user.utils
+package com.example.challenge_random_user.presentation.ui
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,23 +21,31 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
-import android.os.Bundle
-import androidx.core.os.bundleOf
 import com.example.challenge_random_user.domain.models.Result
+import com.example.challenge_random_user.presentation.viewmodels.SharedViewmodel
+import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
+import com.example.challenge_random_user.utils.Screen
 
 @Composable
-fun UserMainScreen(vModel: UserViewModel = hiltViewModel(), navController: NavHostController) {
+fun UserMainScreen(
+    vModel: UserViewModel = hiltViewModel(),
+    navController: NavHostController,
+    sharedViewmodel: SharedViewmodel
+) {
 
     val viewModel by vModel.state.collectAsState()
     val userList = viewModel.allUsers
-    PaintMainScreen(userList, navController)
+    PaintMainScreen(userList, navController, sharedViewmodel)
 
 }
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-private fun PaintMainScreen(userList: ArrayList<Result>, navController: NavHostController) {
+private fun PaintMainScreen(
+    userList: ArrayList<Result>,
+    navController: NavHostController,
+    sharedViewmodel: SharedViewmodel
+) {
     Column(
         Modifier
             .fillMaxSize(1f)
@@ -55,14 +62,8 @@ private fun PaintMainScreen(userList: ArrayList<Result>, navController: NavHostC
                         .fillMaxHeight(1f)
                         .padding(20.dp)
                         .clickable {
-                            navController.navigate("DetailScreen/${Uri.encode(item.toString())}") {
-                                launchSingleTop = true
-                                restoreState = true
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
-                                }
-                                bundleOf("item" to item)
-                            }
+                            sharedViewmodel.addValue(item)
+                            navController.navigate(Screen.DETAIL_SCREEN.route)
                         },
                     shape = RoundedCornerShape(12.dp),
                     elevation = 15.dp
