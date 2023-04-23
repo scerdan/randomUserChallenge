@@ -5,7 +5,7 @@ import java.io.Serializable
 
 data class Id(
     @SerializedName("name")
-    val name: String,
+    val name: String? = "",
     @SerializedName("value")
-    val value: String
+    val value: String? = ""
 ): Serializable

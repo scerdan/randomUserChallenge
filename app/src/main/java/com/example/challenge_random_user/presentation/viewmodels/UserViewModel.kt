@@ -3,6 +3,7 @@ package com.example.challenge_random_user.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.challenge_random_user.data.repository.UserRepositoryImpl
+import com.example.challenge_random_user.domain.models.Result
 import com.example.challenge_random_user.presentation.UserState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.example.challenge_random_user.domain.models.Result
 
 
 @HiltViewModel
@@ -34,8 +34,9 @@ class UserViewModel @Inject constructor(
             when (users.code()) {
                 200 -> {
                     if (users.isSuccessful) {
-                        users.body()?.results?.map { onlyUser ->
-                            _allUsers.add(onlyUser)
+                        val newUsers = users.body()?.results?.distinct()
+                            if (newUsers != null) {
+                                _allUsers.addAll(newUsers)
                         }
                     }
                     _state.value = UserState(allUsers = _allUsers)
