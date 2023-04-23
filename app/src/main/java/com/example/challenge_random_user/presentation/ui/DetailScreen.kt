@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
@@ -128,14 +129,18 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                                 dataNew?.picture?.thumbnail.toString()
                             )
                         },
-                        color = GradientColor3
+                        color = GradientColor3,
+                        fontSize = 17.sp,
+                        textDecoration = TextDecoration.Underline
                     )
                     Text(
                         text = dataNew?.phone.toString(),
                         modifier = Modifier.clickable {
                             callPhone(context, dataNew?.phone.toString())
                         },
-                        color = GradientColor3
+                        color = GradientColor3,
+                        fontSize = 17.sp,
+                        textDecoration = TextDecoration.Underline
                     )
                 }
             }

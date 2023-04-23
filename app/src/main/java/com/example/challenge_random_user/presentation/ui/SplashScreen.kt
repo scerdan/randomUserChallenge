@@ -98,18 +98,25 @@ fun SplashScreen(navController: NavHostController) {
                 )
             }
         }
-        Row(
-            Modifier
-                .align(Alignment.CenterHorizontally)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                "CHALLENGE", style = TextStyle(
-                    color = GradientColor5,
-                    fontSize = 50.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Monospace
-                )
-            )
+
         }
+        Text(
+            "CHALLENGE", style = TextStyle(
+                color = GradientColor6,
+                fontSize = 50.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.Monospace
+            )
+        )
+        Text(
+            text = "by Santiago Joel Cerdan",
+            fontWeight = FontWeight.ExtraLight,
+            fontSize = 18.sp,
+            fontFamily = FontFamily.Default,
+            color = GradientColor6
+        )
     }
 }
