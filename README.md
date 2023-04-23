@@ -36,3 +36,27 @@ The `Kotlin` plugin for Android Studio is also required.
 
 La [API RANDOM USER](https://randomuser.me/) es una API gratuita y de código abierto para generar datos aleatorios de usuarios. Como Lorem Ipsum, pero para personas.
 La misma nos proporcionará un objeto JSON, XML, CSV o YAML que podremos analizar y aplicar a nuestras apps.
+
+## License
+MIT License
+
+Copyright (c) 2017 RandomAPI
+[Random User Github](https://github.com/RandomAPI/Randomuser.me-Node)
+[Random User Web](https://randomuser.me/)
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
