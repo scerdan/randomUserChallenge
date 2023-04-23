@@ -53,8 +53,7 @@ class UserViewModel @Inject constructor(
     }
 
     suspend fun fetchNextPageData() {
-            pageCount++
-        Log.e(pageCount.toString(), "fetchNextPageData")
-            getUsers()
+        pageCount++
+        getUsers()
     }
 }

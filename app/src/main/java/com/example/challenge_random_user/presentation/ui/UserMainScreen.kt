@@ -1,6 +1,7 @@
 package com.example.challenge_random_user.presentation.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,6 +52,8 @@ private fun PaintMainScreen(
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
     val userList = viewModel.allUsers
+    val lastIndex = userList.lastIndex
+    val lastVisibleIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
 
     Column(
         Modifier
@@ -62,12 +65,14 @@ private fun PaintMainScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             state = listState
         ) {
-            items(userList) { item ->
-                if (listState.firstVisibleItemIndex == 10) {
-                    scope.launch(Dispatchers.Unconfined) {
-                        mainViewmodel.fetchNextPageData()
-                    }
+
+            if (lastVisibleIndex == lastIndex) {
+                scope.launch(Dispatchers.Unconfined) {
+                    mainViewmodel.fetchNextPageData()
                 }
+            }
+
+            items(userList) { item ->
                 Card(
                     Modifier
                         .fillMaxWidth(1.30f)
