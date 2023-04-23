@@ -7,7 +7,7 @@ También al dar click sobre alguna tarjeta, vamos a poder visualizar los detalle
 
 | Splash Screen | Home Screen | Detail Screen |
 -------------------|-------------------|----------------
-|![Splash Screen](https://github.com/scerdan/randomUserChallenge/blob/core_branch/screenshots/splash.png) | ![Home Screen](https://github.com/scerdan/randomUserChallenge/blob/core_branch/screenshots/userList.png) | ![EDetail Screen](https://github.com/scerdan/randomUserChallenge/blob/core_branch/screenshots/userList.png) |
+|![Splash Screen](https://github.com/scerdan/randomUserChallenge/blob/core_branch/screenshots/splash.png) | ![Home Screen](https://github.com/scerdan/randomUserChallenge/blob/core_branch/screenshots/userList.png) | ![EDetail Screen](https://github.com/scerdan/randomUserChallenge/blob/core_branch/screenshots/userDetail.png) |
 
 ## Previews
 <p align="center">
