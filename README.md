@@ -19,6 +19,9 @@ También al dar click sobre alguna tarjeta, vamos a poder visualizar los detalle
 Puedes clonar éste repo y correrlo en [Android Studio](https://developer.android.com/studio) o descargarte la app desde éste [Folder](https://github.com/scerdan/randomUserChallenge/tree/core_branch/apk) e instalarla en cualquier dispositivo android.
 The `Kotlin` plugin for Android Studio is also required.
 
+<img align="right" width="90px" src="https://user-images.githubusercontent.com/24237865/178630165-76855349-ac04-4474-8bcf-8eb5f8c41095.png"/>
+
+
 ## Implemented technologies
 
 * [Kotlin](https://kotlinlang.org/)
