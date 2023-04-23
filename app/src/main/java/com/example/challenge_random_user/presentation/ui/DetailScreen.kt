@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -38,6 +39,7 @@ import kotlinx.coroutines.*
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun DetailScreen(viewModel: SharedViewmodel) {
+    val context = LocalContext.current
 
 
     val dataNew = viewModel.clickedUser
@@ -50,8 +52,8 @@ fun DetailScreen(viewModel: SharedViewmodel) {
         this.add(1, dataNew?.name?.title + " " + dataNew?.name?.first + " " + dataNew?.name?.last)
         this.add(2, dataNew?.login?.username.toString())
 //        this.add(3, dataNew?.email.toString())
-        this.add(3, dataNew?.phone.toString())
-        this.add(4, address)
+//        this.add(3, dataNew?.phone.toString())
+        this.add(3, address)
     }
 
 
@@ -62,7 +64,6 @@ fun DetailScreen(viewModel: SharedViewmodel) {
             .background(backMainColor),
         verticalArrangement = Arrangement.Center
     ) {
-        val context = LocalContext.current
         Card(
             Modifier
                 .fillMaxWidth(1f)
@@ -111,10 +112,23 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                         )
                     }
                 }
-                Text(text = dataNew?.email.toString(),
-                    Modifier.clickable {
-                        sendEmail(context, dataNew?.email.toString())
-                    })
+                Column(
+                    Modifier
+                        .fillMaxWidth(1f)
+                        .padding(0.dp, 5.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceAround
+                ) {
+                    Text(text = dataNew?.email.toString(),
+                        Modifier.clickable {
+                            sendEmail(context, dataNew?.email.toString())
+                        })
+                    Text(text = dataNew?.phone.toString(),
+                        Modifier.clickable {
+                            callPhone(context, dataNew?.phone.toString())
+                        })
+                }
+
             }
         }
     }
@@ -124,18 +138,12 @@ fun DetailScreen(viewModel: SharedViewmodel) {
 fun sendEmail(context: Context, recipient: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         this.addCategory(Intent.CATEGORY_DEFAULT)
-        data = Uri.parse("mailto:")
         putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
+        putExtra(Intent.EXTRA_SUBJECT, "subject");
+        putExtra(Intent.EXTRA_TEXT, "body");
     }
-    if (intent.resolveActivity(context.packageManager) != null) {
-        context.startActivity(intent)
-    } else {
-        Toast.makeText(
-            context,
-            "No hay aplicaciones de correo electrónico instaladas",
-            Toast.LENGTH_SHORT
-        ).show()
-    }
+
+    context.startActivity(Intent.createChooser(intent,"Elige una app para enviar el correo"))
 }
 
 @OptIn(DelicateCoroutinesApi::class)
@@ -153,10 +161,18 @@ fun saveImageFromUrlToGallery(context: Context, imageUrl: String, fileName: Stri
 
         val contentResolver = context.contentResolver
         val imageUri = MediaStore.Images.Media.insertImage(contentResolver, bitmap, fileName, "")
-        val galleryIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(imageUri))
+        val galleryIntent = Intent(Intent.ACTION_MEDIA_SCANNER_STARTED, Uri.parse(imageUri))
         context.sendBroadcast(galleryIntent)
     }
 
     Toast.makeText(context, "Imagen guardada en la galería", Toast.LENGTH_SHORT).show()
 }
 
+@SuppressLint("QueryPermissionsNeeded")
+fun callPhone(context: Context, phoneNumber: String) {
+    val phoneNumberUri = "tel:$phoneNumber"
+    val intent = Intent(Intent.ACTION_DIAL).apply {
+        data = Uri.parse(phoneNumberUri)
+    }
+    context.startActivity(Intent.createChooser(intent, "Elige una app para realizar la llamada"))
+}

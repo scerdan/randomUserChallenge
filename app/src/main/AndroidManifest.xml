@@ -26,8 +26,10 @@
             android:theme="@style/Theme.Challenge_random_user">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.ACTION_DIAL"/>
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.ACTION_SEND" />
+                <action android:name="android.intent.action.ACTION_MEDIA_SCANNER_STARTED" />
             </intent-filter>
         </activity>
     </application>
