@@ -11,5 +11,5 @@ También al dar click sobre alguna tarjeta, vamos a poder visualizar los detalle
 
 ## Previews
 <p align="center">
-<img src="https://github.com/scerdan/randomUserChallenge/blob/core_branch/screenshots/giffRecord.gif" width="270" height="600" />
+<img src="https://github.com/scerdan/randomUserChallenge/blob/core_branch/screenshots/newRecord.gif" width="270" height="600" />
 </p>
