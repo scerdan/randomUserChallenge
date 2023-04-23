@@ -24,6 +24,7 @@ import coil.compose.rememberImagePainter
 import com.example.challenge_random_user.domain.models.Result
 import com.example.challenge_random_user.presentation.viewmodels.SharedViewmodel
 import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
+import com.example.challenge_random_user.ui.theme.backMainColor
 import com.example.challenge_random_user.utils.Screen
 
 @Composable
@@ -49,7 +50,7 @@ private fun PaintMainScreen(
     Column(
         Modifier
             .fillMaxSize(1f)
-            .background(Color.White)
+            .background(backMainColor)
     ) {
         LazyColumn(
             Modifier.fillMaxSize(1f),

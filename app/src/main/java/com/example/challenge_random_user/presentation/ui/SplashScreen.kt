@@ -51,7 +51,7 @@ fun SplashScreen(navController: NavHostController) {
     LaunchedEffect(key1 = true) {
         animationPlayed = true
         delay(2000L)
-        Constants.goTo(Screen.HOME_SCREEN.route,navController, true)
+        Constants.goTo(Screen.HOME_SCREEN.route, navController, true)
     }
 
 
@@ -78,6 +78,7 @@ fun SplashScreen(navController: NavHostController) {
                             0.35f to GradientColor3,
                             0.45f to GradientColor4,
                             0.75f to GradientColor5,
+                            1f to GradientColor6,
                         ),
                         startAngle = START_ANGLE,
                         sweepAngle = currentPercent.value,
