@@ -1,5 +1,6 @@
 package com.example.challenge_random_user.presentation.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
@@ -48,9 +49,9 @@ fun DetailScreen(viewModel: SharedViewmodel) {
         this.add(0, dataNew?.gender.toString())
         this.add(1, dataNew?.name?.title + " " + dataNew?.name?.first + " " + dataNew?.name?.last)
         this.add(2, dataNew?.login?.username.toString())
-        this.add(3, dataNew?.email.toString())
-        this.add(4, dataNew?.phone.toString())
-        this.add(5, address)
+//        this.add(3, dataNew?.email.toString())
+        this.add(3, dataNew?.phone.toString())
+        this.add(4, address)
     }
 
 
@@ -61,10 +62,11 @@ fun DetailScreen(viewModel: SharedViewmodel) {
             .background(backMainColor),
         verticalArrangement = Arrangement.Center
     ) {
+        val context = LocalContext.current
         Card(
             Modifier
                 .fillMaxWidth(1f)
-                .fillMaxHeight(5 / 10f)
+                .fillMaxHeight(6 / 10f)
                 .padding(25.dp, 0.dp),
             shape = RoundedCornerShape(12.dp),
             elevation = 15.dp
@@ -76,7 +78,6 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                         .height(200.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    val context = LocalContext.current
                     Image(
                         modifier = Modifier
                             .fillMaxHeight()
@@ -110,8 +111,30 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                         )
                     }
                 }
+                Text(text = dataNew?.email.toString(),
+                    Modifier.clickable {
+                        sendEmail(context, dataNew?.email.toString())
+                    })
             }
         }
+    }
+}
+
+@SuppressLint("QueryPermissionsNeeded")
+fun sendEmail(context: Context, recipient: String) {
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        this.addCategory(Intent.CATEGORY_DEFAULT)
+        data = Uri.parse("mailto:")
+        putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
+    }
+    if (intent.resolveActivity(context.packageManager) != null) {
+        context.startActivity(intent)
+    } else {
+        Toast.makeText(
+            context,
+            "No hay aplicaciones de correo electrónico instaladas",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
 
@@ -136,3 +159,4 @@ fun saveImageFromUrlToGallery(context: Context, imageUrl: String, fileName: Stri
 
     Toast.makeText(context, "Imagen guardada en la galería", Toast.LENGTH_SHORT).show()
 }
+
