@@ -3,6 +3,7 @@ package com.example.challenge_random_user.presentation.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
@@ -18,12 +19,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -31,8 +34,11 @@ import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.example.challenge_random_user.presentation.viewmodels.SharedViewmodel
 import com.example.challenge_random_user.ui.theme.GradientColor1
+import com.example.challenge_random_user.ui.theme.GradientColor3
 import com.example.challenge_random_user.ui.theme.backMainColor
 import kotlinx.coroutines.*
+import java.io.File
+import java.io.FileOutputStream
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -104,7 +110,7 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                             fontSize = 18.sp,
                             textAlign = TextAlign.Start,
                             maxLines = 1,
-                            color = GradientColor1
+                            color = Color.Black,
                         )
                     }
                 }
@@ -113,41 +119,32 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                         .fillMaxWidth(1f)
                         .padding(0.dp, 5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceAround
+                    verticalArrangement = Arrangement.SpaceAround,
                 ) {
-                    Text(text = dataNew?.email.toString(),
-                        Modifier.clickable {
-                            sendEmailWithAttachment(context, dataNew?.email.toString(), dataNew?.picture?.thumbnail)
-                        })
-                    Text(text = dataNew?.phone.toString(),
-                        Modifier.clickable {
+                    Text(
+                        text = dataNew?.email.toString(),
+                        modifier = Modifier.clickable {
+                            sendEmailWithAttachment(
+                                context,
+                                dataNew?.email.toString(),
+                                dataNew?.picture?.thumbnail.toString()
+                            )
+                        },
+                        color = GradientColor3
+                    )
+                    Text(
+                        text = dataNew?.phone.toString(),
+                        modifier = Modifier.clickable {
                             callPhone(context, dataNew?.phone.toString())
-                        })
+                        },
+                        color = GradientColor3
+                    )
                 }
-
             }
         }
     }
 }
 
-@SuppressLint("IntentReset")
-fun sendEmailWithAttachment(context: Context, recipient: String, imageUri: String?) {
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        data = Uri.parse("mailto:")
-        putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
-        putExtra(Intent.EXTRA_SUBJECT, "Asunto del correo")
-        putExtra(Intent.EXTRA_TEXT, "Contenido del correo")
-        imageUri?.let {
-            putExtra(Intent.EXTRA_STREAM, Uri.parse(it))
-        }
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        type = "message/rfc822"
-    }
-    val chooserIntent = Intent.createChooser(intent, "Enviar correo con:")
-    context.startActivity(chooserIntent)
-}
-
-@OptIn(DelicateCoroutinesApi::class)
 fun saveImageFromUrlToGallery(context: Context, imageUrl: String, fileName: String) {
     GlobalScope.launch(Dispatchers.IO) {
         val imageLoader = ImageLoader.Builder(context)
@@ -166,7 +163,7 @@ fun saveImageFromUrlToGallery(context: Context, imageUrl: String, fileName: Stri
         context.sendBroadcast(galleryIntent)
     }
 
-    Toast.makeText(context, "Imagen guardada en la galería", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, "Imagen guardada en la galería", Toast.LENGTH_LONG).show()
 }
 
 @SuppressLint("QueryPermissionsNeeded")
@@ -177,3 +174,44 @@ fun callPhone(context: Context, phoneNumber: String) {
     }
     context.startActivity(Intent.createChooser(intent, "Elige una app para realizar la llamada"))
 }
+
+fun sendEmailWithAttachment(context: Context, recipient: String, imageUrl: String) {
+    GlobalScope.launch(Dispatchers.IO) {
+        val imageLoader = ImageLoader.Builder(context)
+            .crossfade(true)
+            .build()
+        val imageRequest = ImageRequest.Builder(context)
+            .data(imageUrl)
+            .build()
+        val bitmap = (imageLoader.execute(imageRequest).drawable as BitmapDrawable).bitmap
+
+        val cachePath = File(context.cacheDir, "images")
+        cachePath.mkdirs()
+        val file = File(cachePath, "image.jpg")
+        val fileOutputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        fileOutputStream.close()
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
+            putExtra(
+                Intent.EXTRA_STREAM,
+                FileProvider.getUriForFile(
+                    context,
+                    "${context.applicationContext.packageName}.provider",
+                    file
+                )
+            )
+            putExtra(Intent.EXTRA_SUBJECT, "Hola! Te adjunto la imagen solicitada")
+            putExtra(Intent.EXTRA_TEXT, "Aguardo tu respuesta! :)")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            type = "message/rfc822"
+        }
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+
+        context.startActivity(Intent.createChooser(intent, "Enviar correo con:"))
+    }
+}
+
