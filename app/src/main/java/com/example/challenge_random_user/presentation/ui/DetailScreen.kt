@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,7 +33,6 @@ import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.example.challenge_random_user.presentation.viewmodels.SharedViewmodel
-import com.example.challenge_random_user.ui.theme.GradientColor1
 import com.example.challenge_random_user.ui.theme.GradientColor3
 import com.example.challenge_random_user.ui.theme.backMainColor
 import kotlinx.coroutines.*

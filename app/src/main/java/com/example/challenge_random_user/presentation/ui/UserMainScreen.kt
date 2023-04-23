@@ -1,7 +1,6 @@
 package com.example.challenge_random_user.presentation.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
