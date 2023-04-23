@@ -1,5 +1,6 @@
 package com.example.challenge_random_user.presentation.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.challenge_random_user.data.repository.UserRepositoryImpl
 import com.example.challenge_random_user.domain.models.Result
@@ -53,6 +54,7 @@ class UserViewModel @Inject constructor(
 
     suspend fun fetchNextPageData() {
             pageCount++
+        Log.e(pageCount.toString(), "fetchNextPageData")
             getUsers()
     }
 }

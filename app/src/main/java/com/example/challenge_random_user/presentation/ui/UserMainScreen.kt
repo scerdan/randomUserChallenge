@@ -1,13 +1,11 @@
 package com.example.challenge_random_user.presentation.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,7 +20,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.example.challenge_random_user.domain.models.Result
 import com.example.challenge_random_user.presentation.UserState
 import com.example.challenge_random_user.presentation.viewmodels.SharedViewmodel
 import com.example.challenge_random_user.presentation.viewmodels.UserViewModel
@@ -42,6 +39,7 @@ fun UserMainScreen(
     PaintMainScreen(navController, sharedViewmodel, viewModelState, mainViewmodel)
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 private fun PaintMainScreen(
@@ -64,10 +62,12 @@ private fun PaintMainScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             state = listState
         ) {
-            scope.launch(Dispatchers.IO) {
-                mainViewmodel.fetchNextPageData()
-            }
             items(userList) { item ->
+                if (listState.firstVisibleItemIndex == 10) {
+                    scope.launch(Dispatchers.Unconfined) {
+                        mainViewmodel.fetchNextPageData()
+                    }
+                }
                 Card(
                     Modifier
                         .fillMaxWidth(1.30f)
