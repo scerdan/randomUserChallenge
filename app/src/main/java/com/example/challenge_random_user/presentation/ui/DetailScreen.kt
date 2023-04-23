@@ -18,14 +18,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -51,8 +49,6 @@ fun DetailScreen(viewModel: SharedViewmodel) {
         this.add(0, dataNew?.gender.toString())
         this.add(1, dataNew?.name?.title + " " + dataNew?.name?.first + " " + dataNew?.name?.last)
         this.add(2, dataNew?.login?.username.toString())
-//        this.add(3, dataNew?.email.toString())
-//        this.add(3, dataNew?.phone.toString())
         this.add(3, address)
     }
 
@@ -121,7 +117,7 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                 ) {
                     Text(text = dataNew?.email.toString(),
                         Modifier.clickable {
-                            sendEmail(context, dataNew?.email.toString())
+                            sendEmailWithAttachment(context, dataNew?.email.toString(), dataNew?.picture?.thumbnail)
                         })
                     Text(text = dataNew?.phone.toString(),
                         Modifier.clickable {
@@ -134,16 +130,21 @@ fun DetailScreen(viewModel: SharedViewmodel) {
     }
 }
 
-@SuppressLint("QueryPermissionsNeeded")
-fun sendEmail(context: Context, recipient: String) {
+@SuppressLint("IntentReset")
+fun sendEmailWithAttachment(context: Context, recipient: String, imageUri: String?) {
     val intent = Intent(Intent.ACTION_SEND).apply {
-        this.addCategory(Intent.CATEGORY_DEFAULT)
+        data = Uri.parse("mailto:")
         putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
-        putExtra(Intent.EXTRA_SUBJECT, "subject");
-        putExtra(Intent.EXTRA_TEXT, "body");
+        putExtra(Intent.EXTRA_SUBJECT, "Asunto del correo")
+        putExtra(Intent.EXTRA_TEXT, "Contenido del correo")
+        imageUri?.let {
+            putExtra(Intent.EXTRA_STREAM, Uri.parse(it))
+        }
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        type = "message/rfc822"
     }
-
-    context.startActivity(Intent.createChooser(intent,"Elige una app para enviar el correo"))
+    val chooserIntent = Intent.createChooser(intent, "Enviar correo con:")
+    context.startActivity(chooserIntent)
 }
 
 @OptIn(DelicateCoroutinesApi::class)
