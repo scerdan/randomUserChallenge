@@ -39,10 +39,10 @@ La misma nos proporcionará un objeto JSON, XML, CSV o YAML que podremos analiza
 
 ## License
 MIT License
-
-Copyright (c) 2017 RandomAPI
 [Random User Github](https://github.com/RandomAPI/Randomuser.me-Node)
 [Random User Web](https://randomuser.me/)
+
+Copyright (c) 2017 RandomAPI
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
