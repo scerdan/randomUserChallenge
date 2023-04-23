@@ -32,11 +32,9 @@ fun UserMainScreen(
     navController: NavHostController,
     sharedViewmodel: SharedViewmodel
 ) {
-
     val viewModel by vModel.state.collectAsState()
     val userList = viewModel.allUsers
     PaintMainScreen(userList, navController, sharedViewmodel)
-
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -92,8 +90,6 @@ private fun PaintMainScreen(
                             Text(text = item.name.title + " " + item.name.first + " " + item.name.last)
                         }
                     }
-
-
                 }
             }
         }

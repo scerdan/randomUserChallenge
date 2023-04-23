@@ -40,7 +40,9 @@ class UserViewModel @Inject constructor(
                     }
                     _state.value = UserState(allUsers = _allUsers)
                 }
-                else -> {}
+                else -> {
+                    _state.value = UserState(error = users.errorBody().toString())
+                }
             }
         }
     }

@@ -45,9 +45,7 @@ import java.io.FileOutputStream
 fun DetailScreen(viewModel: SharedViewmodel) {
     val context = LocalContext.current
 
-
     val dataNew = viewModel.clickedUser
-    Log.e("USER =", dataNew.toString())
 
     val textUserData = arrayListOf<String>().apply {
         val address =
@@ -162,7 +160,6 @@ fun saveImageFromUrlToGallery(context: Context, imageUrl: String, fileName: Stri
         val galleryIntent = Intent(Intent.ACTION_MEDIA_SCANNER_STARTED, Uri.parse(imageUri))
         context.sendBroadcast(galleryIntent)
     }
-
     Toast.makeText(context, "Imagen guardada en la galería", Toast.LENGTH_LONG).show()
 }
 
@@ -209,7 +206,6 @@ fun sendEmailWithAttachment(context: Context, recipient: String, imageUrl: Strin
             type = "message/rfc822"
         }
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
 
         context.startActivity(Intent.createChooser(intent, "Enviar correo con:"))
     }
