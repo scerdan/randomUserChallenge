@@ -6,7 +6,7 @@ import com.example.challenge_random_user.BuildConfig
 class Constants {
 
     companion object {
-        const val LIMIT = "20"
+        const val NO_RECORDS_PER_REQUEST = "20"
         const val BASEURL = BuildConfig.BASE_URL
 
         fun goTo(direction: String, navController: NavController, offset: Boolean) {

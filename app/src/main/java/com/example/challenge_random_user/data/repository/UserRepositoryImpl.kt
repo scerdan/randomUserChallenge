@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(private val api: ApiService) : UserRepository {
 
-    override suspend fun getRandomUser(): Response<User> {
+    override suspend fun getRandomUser(pageCount: Int): Response<User> {
         return api.getRandomUser()
     }
 }
