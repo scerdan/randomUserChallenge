@@ -34,6 +34,7 @@ The `Kotlin` plugin for Android Studio is also required.
 * [Jetpack Compose](https://developer.android.com/jetpack/compose?hl=es-419)
 * [Kotlin Coroutines](https://developer.android.com/kotlin/coroutines)
 * [Coil](https://coil-kt.github.io/coil/)
+* [Accompanist Jetpack Compose Permissions¶](https://google.github.io/accompanist/permissions/)
 
 ## RandomUser API
 
