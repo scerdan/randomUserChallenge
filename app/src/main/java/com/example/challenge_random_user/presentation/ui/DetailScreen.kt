@@ -1,5 +1,8 @@
 package com.example.challenge_random_user.presentation.ui
 
+import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,15 +28,16 @@ import com.example.challenge_random_user.domain.CommunicationManager
 import com.example.challenge_random_user.presentation.viewmodels.SharedViewmodel
 import com.example.challenge_random_user.ui.theme.GradientColor3
 import com.example.challenge_random_user.ui.theme.backMainColor
-import kotlinx.coroutines.*
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
-@OptIn(ExperimentalCoilApi::class)
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalCoilApi::class, ExperimentalPermissionsApi::class)
 @Composable
 fun DetailScreen(viewModel: SharedViewmodel) {
     val context = LocalContext.current
-    val communicationManager = CommunicationManager()
     val dataNew = viewModel.clickedUser
-
+    val communicationManager = CommunicationManager()
     val textUserData = arrayListOf<String>().apply {
         val address =
             dataNew?.location?.street?.name + dataNew?.location?.street?.number + " " + "${dataNew?.location?.city}" + " " + "${dataNew?.location?.state}" + " " + "${dataNew?.location?.postcode}"
@@ -40,6 +45,19 @@ fun DetailScreen(viewModel: SharedViewmodel) {
         this.add(1, dataNew?.name?.title + " " + dataNew?.name?.first + " " + dataNew?.name?.last)
         this.add(2, dataNew?.login?.username.toString())
         this.add(3, address)
+    }
+
+    val allPermission = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_CONTACTS
+        )
+    )
+
+    LaunchedEffect(key1 = true) {
+        allPermission.launchMultiplePermissionRequest()
     }
 
     Column(
@@ -68,10 +86,12 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                             .fillMaxHeight()
                             .aspectRatio(1f)
                             .clickable {
-                                communicationManager.saveImageFromUrlToGallery(
-                                    context,
-                                    dataNew?.picture?.large.toString(),
-                                    "primeraFoto"
+                                communicationManager.checkPermission(
+                                    permission = allPermission,
+                                    context = context,
+                                    saveImageUrl = dataNew?.picture?.large.toString(),
+                                    fileName = dataNew?.login?.username.toString(),
+                                    operation = 1
                                 )
                             },
                         painter = rememberImagePainter(dataNew?.picture?.large),
@@ -106,10 +126,12 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                     Text(
                         text = dataNew?.email.toString(),
                         modifier = Modifier.clickable {
-                            communicationManager.sendEmailWithAttachment(
-                                context,
-                                dataNew?.email.toString(),
-                                dataNew?.picture?.thumbnail.toString()
+                            communicationManager.checkPermission(
+                                permission = allPermission,
+                                context = context,
+                                emailRecipient = dataNew?.email.toString(),
+                                emailImageUrl = dataNew?.picture?.thumbnail.toString(),
+                                operation = 2
                             )
                         },
                         color = GradientColor3,
@@ -119,7 +141,12 @@ fun DetailScreen(viewModel: SharedViewmodel) {
                     Text(
                         text = dataNew?.phone.toString(),
                         modifier = Modifier.clickable {
-                            communicationManager.callPhone(context, dataNew?.phone.toString())
+                            communicationManager.checkPermission(
+                                permission = allPermission,
+                                context = context,
+                                phoneNumber = dataNew?.phone.toString(),
+                                operation = 0
+                            )
                         },
                         color = GradientColor3,
                         fontSize = 17.sp,

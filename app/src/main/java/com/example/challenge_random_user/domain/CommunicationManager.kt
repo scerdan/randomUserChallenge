@@ -1,6 +1,6 @@
 package com.example.challenge_random_user.domain
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -12,6 +12,7 @@ import androidx.core.content.FileProvider
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
+import com.google.accompanist.permissions.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -19,16 +20,20 @@ import java.io.File
 import java.io.FileOutputStream
 
 class CommunicationManager {
-
-    fun sendEmailWithAttachment(context: Context, recipient: String, imageUrl: String) {
+    private fun sendEmailWithAttachment(
+        context: Context,
+        emailRecipient: String,
+        emailImageUrl: String
+    ) {
         GlobalScope.launch(Dispatchers.IO) {
             val imageLoader = ImageLoader.Builder(context)
                 .crossfade(true)
                 .build()
             val imageRequest = ImageRequest.Builder(context)
-                .data(imageUrl)
+                .data(emailImageUrl)
                 .build()
-            val bitmap = (imageLoader.execute(imageRequest).drawable as BitmapDrawable).bitmap
+            val bitmap =
+                (imageLoader.execute(imageRequest).drawable as BitmapDrawable).bitmap
 
             val cachePath = File(context.cacheDir, "images")
             cachePath.mkdirs()
@@ -39,7 +44,7 @@ class CommunicationManager {
 
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "image/*"
-                putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(emailRecipient))
                 putExtra(
                     Intent.EXTRA_STREAM,
                     FileProvider.getUriForFile(
@@ -59,16 +64,20 @@ class CommunicationManager {
         }
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
-    fun callPhone(context: Context, phoneNumber: String) {
+    private fun callPhone(context: Context, phoneNumber: String) {
         val phoneNumberUri = "tel:$phoneNumber"
         val intent = Intent(Intent.ACTION_DIAL).apply {
             data = Uri.parse(phoneNumberUri)
         }
-        context.startActivity(Intent.createChooser(intent, "Elige una app para realizar la llamada"))
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                "Elige una app para realizar la llamada"
+            )
+        )
     }
 
-    fun saveImageFromUrlToGallery(context: Context, imageUrl: String, fileName: String) {
+    private fun saveImageFromUrlToGallery(context: Context, imageUrl: String, fileName: String) {
         GlobalScope.launch(Dispatchers.IO) {
             val imageLoader = ImageLoader.Builder(context)
                 .availableMemoryPercentage(0.25)
@@ -81,10 +90,64 @@ class CommunicationManager {
             val bitmap = (result as BitmapDrawable).bitmap
 
             val contentResolver = context.contentResolver
-            val imageUri = MediaStore.Images.Media.insertImage(contentResolver, bitmap, fileName, "")
-            val galleryIntent = Intent(Intent.ACTION_MEDIA_SCANNER_STARTED, Uri.parse(imageUri))
+            val imageUri =
+                MediaStore.Images.Media.insertImage(contentResolver, bitmap, fileName, "")
+            val galleryIntent =
+                Intent(Intent.ACTION_MEDIA_SCANNER_STARTED, Uri.parse(imageUri))
             context.sendBroadcast(galleryIntent)
         }
         Toast.makeText(context, "Imagen guardada en la galería", Toast.LENGTH_LONG).show()
     }
+
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    fun checkPermission(
+        permission: MultiplePermissionsState,
+        context: Context,
+        emailRecipient: String = "",
+        emailImageUrl: String = "",
+        phoneNumber: String = "",
+        saveImageUrl: String = "",
+        fileName: String = "",
+        operation: Int
+    ) {
+        permission.permissions.forEach { typeOfPermission ->
+            when (typeOfPermission.permission) {
+                Manifest.permission.CALL_PHONE -> {
+                    when {
+                        typeOfPermission.status.isGranted -> {
+                            if (operation == 0) {
+                                callPhone(context, phoneNumber)
+                            }
+                        }
+                        typeOfPermission.status.shouldShowRationale -> {}
+                        else -> {}
+                    }
+                }
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE -> {
+                    when {
+                        typeOfPermission.status.isGranted -> {
+                            if (operation == 1) {
+                                saveImageFromUrlToGallery(context, saveImageUrl, fileName)
+                            }
+                        }
+                        typeOfPermission.status.shouldShowRationale -> {}
+                        else -> {}
+                    }
+                }
+                Manifest.permission.READ_CONTACTS -> {
+                    when {
+                        typeOfPermission.status.isGranted -> {
+                            if (operation == 2) {
+                                sendEmailWithAttachment(context, emailRecipient, emailImageUrl)
+                            }
+                        }
+                        typeOfPermission.status.shouldShowRationale -> {}
+                        else -> {}
+                    }
+                }
+            }
+        }
+    }
+
 }
